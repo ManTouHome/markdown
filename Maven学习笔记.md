@@ -139,25 +139,25 @@ d.配置本地仓库,找到maven目录/conf/settings.xml，设置
 
 注意：第一次执行会下载maven的基础组件，运行mvn命令必须在有pom文件的目录下运行
 
-1.编译程序
+#### 1.编译程序
 
 ```maven
 mvn compile   #只编译main目录中的文件，不会编译test中的文件
 ```
 
-2.测试程序
+#### 2.测试程序
 
 ```maven
 mvn test
 ```
 
-3.项目打包
+#### 3.项目打包
 
 ```maven
 mvn package    #把打成的jar包放到了target目录下
 ```
 
-4.安装
+#### 4.安装
 
 ```maven
 mvn install    #将开发的模块放入本地仓库，供其他模块使用
@@ -165,7 +165,7 @@ mvn install    #将开发的模块放入本地仓库，供其他模块使用
 注意:放入本地仓库的位置由pom.xml中配置的groupId，artifactId，version决定
 ```
 
-5.清理
+#### 5.清理
 
 ```maven
 mvn clean   #删除target目录，即删除编译的文件
@@ -183,7 +183,7 @@ mvn clean   #删除target目录，即删除编译的文件
 </dependency>
 ```
 
-1.依赖范围(scope标签的值)
+#### 1.依赖范围
 
 |      | complie（默认） | test | provided |
 | :--: | :-------------: | :--: | :------: |
@@ -191,7 +191,7 @@ mvn clean   #删除target目录，即删除编译的文件
 | 测试 |        √        |  √   |    √     |
 | 运行 |        √        |  ×   |    ×     |
 
-2.依赖排除
+#### 2.依赖排除
 
 ```xml
 <!-- https://mvnrepository.com/artifact/org.springframework/spring-context -->
@@ -208,13 +208,126 @@ mvn clean   #删除target目录，即删除编译的文件
 </dependency>
 ```
 
-3.依赖的传递性
+#### 3.依赖的传递性
 
 如果A依赖B，B依赖C，则如果依赖范围是compile可以依赖到C，否则依赖不到C
 
-4.整合多个项目
+4.依赖原则
+
+​    a.路径最短优先原则
+
+​	b.路径相同
+
+​			i.如果在同一个pom中，后引入的覆盖先引入的
+
+​			ii.如果在不同的pom文件中,先声明的覆盖后声明的
+
+#### 5.整合多个项目
 
 如果A项目依赖于B项目，先将B项目执行install命令，把B的jar包放到本地仓库，然后再在A项目中引入B项目jar包的依赖
+
+#### 6.统一版本
+
+```xml
+ <properties>
+        <java.version>1.8</java.version>
+     	<mybatisversion>3.0</mybatisversion>    #标签名可以自定义
+</properties>
+
+<dependencies>
+    <dependency>
+        <groupId>org.mybatis.spring.boot</groupId>
+        <artifactId>mybatis-spring-boot-starter</artifactId>
+        <version>${mybatisversion}</version>		#引用版本
+    </dependency>
+</dependencies>
+```
+
+7.打包方式
+
+```xml
+<groupId>com.weina</groupId>     #大项目的项目名
+<artifactId>weina</artifactId>   #子模块的名称
+<version>0.0.1-SNAPSHOT</version> #版本号
+<name>weina</name> 
+<packaging>jar</packaging>   #打包方式有jar，war，pom
+```
+
+#### 8.实现继承
+
+实现步骤:
+
+​	a.建立父工程，并且打包方式为pom
+
+​	b.在父工程的pom中编写依赖
+
+​	c.在子工程中继承父工程
+
+父工程：
+
+```xml
+<groupId>com.fu</groupId>     
+<artifactId>fu</artifactId>   
+<version>0.0.1-SNAPSHOT</version> 
+<name>fu</name> 
+<!-- 1.打包方式为pom -->
+<packaging>pom</packaging> 
+<!-- 2.父工程的依赖需要写在这里面 -->
+<dependencyManagement>       
+    <dependencies>
+    	<dependicy>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.13</version>
+            <scope>test</scope>
+        </dependicy>
+    </dependencies>
+</dependencyManagement>
+```
+
+子工程：
+
+```xml
+<parent>
+	<!-- 1.加入父工程的gav -->
+    <groupId>com.fu</groupId>     
+    <artifactId>fu</artifactId>   
+    <version>0.0.1-SNAPSHOT</version> 
+    <!-- 2.当前工程pom文件到父工程pom文件的相对路径 -->
+    <relativePath>../fu/pom.xml</relativePath>
+</parent>
+<dependicies>
+    <dependicy>
+        <!-- 3.声明需要使用到父类中的哪些依赖  -->
+        <groupId>junit</groupId> 
+        <artifactId>junit</artifactId>       #不需要写version和scope
+    </dependicy>
+</dependicies>
+```
+
+#### 9.聚合
+
+例如:mavaen2依赖于maven1,则在执行时，必须先将maven1加入到本地仓库中(install),之后才能执行maven
+
+以上步骤可以交由聚合一次性搞定
+
+聚合的使用：
+
+在一个总工程中配置聚合
+
+```xml
+ <groupId>com.maven</groupId>     
+ <artifactId>maven</artifactId>   
+ <version>0.0.1-SNAPSHOT</version> 
+ <!-- 1.打包方式为pom -->
+ <packaging>pom</packaging> 
+ <!-- 2.配置聚合 -->
+ <moudles>
+     <!-- 3.项目的根路径，配置顺序随意 -->
+     <moudle>../maven1</moudle>
+     <moudle>../maven2</moudle>
+ </moudles>
+```
 
 ### 5.maven生命周期
 
