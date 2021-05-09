@@ -258,7 +258,7 @@ git branch -d 分支名称   #不能删除当前分支和未合并的分支
 
 ```git
 git merge 分支名称  #默认fast forward
-git merge --on-ff 分支名称   #禁止fast forward
+git merge --no-ff 分支名称   #禁止fast forward
 ```
 
 fast foward:分支指针的移动
