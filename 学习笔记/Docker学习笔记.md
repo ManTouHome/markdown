@@ -226,6 +226,12 @@ docker run -id --name=容器名称 镜像名称：标签
 docker exec -it 容器名称（或容器ID） /bin/bash
 ```
 
+查看容器中linux版本
+
+```docker
+cat /etc/issue
+```
+
 ### 3.停止与启动容器
 
 1.停止容器
@@ -301,7 +307,7 @@ docker pull centos/mysql-57-centos7
 2.创建容器
 
 ```docker
-docker run -id --name=tensquare_mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql
+docker run -id --name=tensquare_mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=root mysql
 ```
 
 -p 代表端口映射，格式: 宿主机映射端口:容器运行端口
@@ -312,6 +318,8 @@ docker run -id --name=tensquare_mysql -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456
 
 ```docker
 docker exec -it tensquare_mysql /bin/bash
+#如果遇到docker容器中无法输入中文的问题则加上参数
+docker exec -it mantou_mysql env LANG=C.UTF-8 /bin/bash
 ```
 
 4.登录mysql
@@ -330,14 +338,14 @@ mysql -u root -p
 
 **解决办法**:
 
-1.进入mysql容器去执行 select user,host,plugin from mysql.user where user = 'root'；查看一下
+1.进入mysql容器去执行 select user,host,plugin from mysql.user where user = 'root';查看一下
 
 2.你会发现plugin是caching_sha2_password，我们把它换成mysql_native_password加密方式就完事了
 
 执行如下两条sql:
 
-ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'root'; 
-ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'root';
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'mantou'; 
+ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'mantou';
 3.别忘了执行命令flush privileges使权限配置项立即生效，问题轻松解决。
 
 ### 2.tomcat部署
@@ -381,6 +389,24 @@ docker pull redis
 ```docker
 docker run -id --name=myredis -p 6379:6379 redis
 ```
+
+3.需要挂载配置文件的方式
+
+```docker
+docker run -d --privileged=true -p 6379:6379 -v /docker/redis/conf/redis.conf:/etc/redis/redis.conf -v /docker/redis/data:/data --name redis-test redis redis-server /etc/redis/redis.conf --appendonly yes
+```
+
+参数说明：
+
+--privileged=true：容器内的root拥有真正root权限，否则容器内root只是外部普通用户权限
+
+-v /docker/redis/conf/redis.conf:/etc/redis/redis.conf：映射配置文件
+
+-v /docker/redis/data:/data：映射数据目录
+
+redis-server /etc/redis/redis.conf：指定配置文件启动redis-server进程
+
+--appendonly yes：开启数据持久化
 
 ## 6.迁移与备份
 
