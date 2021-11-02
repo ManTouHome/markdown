@@ -293,7 +293,7 @@ master试图合并dev,产生冲突
 git merge dev
 ```
 
-![](..\img\冲突.png)
+![](../img/git/冲突.png)
 
 1.解决冲突:
 
@@ -301,11 +301,11 @@ git merge dev
 vi a.txt   #打开冲突的文件，并进行修改
 ```
 
-![](..\img\冲突文件.png)
+![](../img/git/冲突文件.png)
 
 修改后:
 
-![](..\img\文件修改.png)
+![](../img/git/文件修改.png)
 
 告知git冲突解决并再次提交:
 
@@ -316,7 +316,7 @@ git commit -m '冲突解决'
 
 在master分支上会产生两次提交:
 
-![](..\img\master冲突提交.png)
+![](../img/git/master冲突提交.png)
 
 注意:只有在同一时间轴上的两个分支操作才会产生冲突，两个分支指向的commit不一致时可以直接合并。
 

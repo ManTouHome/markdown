@@ -18,7 +18,7 @@ oracle12c:cloud，云计算
 2. 组织结构：一个PGA对应一个客户端，然后传递给SGA
 3. 两阶段提交:客户端提交到PGA，PGA再提交到SGA，SGA对操作进行分析合并发送给数据库，两阶段提交可以减少提交次数，减轻对数据库的压力
 
-![](..\img\oracle\oracle组织结构.png)
+![](../img/oracle/oracle组织结构.png)
 
 ### 3.oracle安装
 
