@@ -4,7 +4,7 @@
 
 ### 项目结构
 
-![](E:\JavaNote\img\MyBatis\项目结构.png)
+![](..\img\MyBatis\项目结构.png)
 
 ### pom. xml
 

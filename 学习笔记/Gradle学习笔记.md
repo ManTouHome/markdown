@@ -171,7 +171,7 @@ method2 {val-> println "直接定义带参数的闭包:${val}"}
 
 运行结果:
 
-![](img\gradle\groovy特性运行结果.png)
+![](..\img\gradle\groovy特性运行结果.png)
 
 ## 2.Gradle的使用
 
