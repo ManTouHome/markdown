@@ -494,7 +494,7 @@ git branch -av #显示所有分支以及指向的Commit
 第一次拉取：
 
 ```git
-git clone ssh值  #不用初始化，直接克隆即可
+git clone -b 分支名称 ssh值  #不用初始化，直接克隆即可
 ```
 
 之后每次拉取:
