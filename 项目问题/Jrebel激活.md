@@ -116,6 +116,12 @@ GUID生成：http://www.ofmonkey.com/transfer/guid
 
 (3)设置IDEA中的Jrebel
 
-![](../img/Jrebel/IDEA中Jrebel.png)
+<details open>
+    <summary>图片展示</summary>
+    <img src="../img/Jrebel/IDEA中Jrebel.png" />
+</details>
 
 (4)重启IDEA
+
+
+
